@@ -1,0 +1,375 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body{padding:0;
+  margin: 0;
+  background: url(1.jpg);
+
+  height: 10%;
+  background-size:  cover;
+  background-repeat: no-repeat;
+  background-attachment: ;
+  /*opacity: 0.5;
+  filter: alpha(opacity=50);*/
+  font-family: 'Roboto', sans-serif;
+}
+
+/*Navigation bar-----------*/
+ul {
+    list-style-type: none;
+    margin: 55px 15px;
+    padding: 0;
+    overflow: hidden;
+    float: right;
+}
+li {
+    float: left;
+}
+li a {
+
+    color: white;
+    text-align: center;
+    padding: 20px 16px;
+    text-decoration: none;
+}
+li a:hover {
+    color: orange;
+}
+
+/*div circles-----------------*/
+.div1{
+  margin: 95px 65px;
+  padding: 0px;
+  height: 200px;
+  width: 200px;
+  background-color:red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/*Div menu*/
+* {
+    box-sizing: border-box;
+}
+
+.column {
+  margin: 0px 150px;
+  border-radius: 18px;
+    padding: 10px;
+    height: 480px;
+	 background-color: black;
+	opacity: 1.0;
+    filter: alpha(opacity=50);
+}
+.middle {
+  width: 80%;
+}
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/*Form*/
+fieldset {
+    background-color: ;
+   width: 400px;
+   height: 250px;
+   display: block;
+    margin: 50px 555px;
+    padding-top: 0.9em;
+    padding-bottom: 0.1em;
+    padding-left:3.0em;
+    padding-right: 0.75em;
+    border: 2px internal (internal value);
+}
+
+/*button*/
+.button {
+    background-color: #4CAF50; /* Green */
+	height: px;
+    border: none;
+    color: white;
+    padding: 6px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+
+.button1 {
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+}
+.button1:hover {
+    background-color: black;
+    color: white;
+}
+.button2 {
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+}
+.button2:hover {
+    background-color: black;
+    color: white;
+}
+.button3 {
+    background-color: blue;
+    color: black;
+    border: 2px solid #e7e7e7;
+}
+.button3:hover {
+    background-color: blue;
+    color: white;
+}
+ </style>
+
+ <script>
+ var products = [];
+    var cart = [];
+
+        function addProduct() {
+
+            var product_desc = document.getElementById("product_desc").value;
+            var qty = document.getElementById("quantity").value;
+            var price = document.getElementById("price").value;
+
+            var newProduct = {
+
+                product_desc: null,
+                product_qty: 0,
+                product_price: 0.00,
+            };
+
+            newProduct.product_desc = product_desc;
+            newProduct.product_qty = qty;
+            newProduct.product_price = price;
+
+
+            products.push(newProduct);
+
+
+            var html = "<table border='1|1' >";
+            html += "<td>Product Description</td>";
+            html += "<td>Quantity</td>";
+            html += "<td>Price</td>";
+            html += "<td>Action</td>";
+            for (var i = 0; i < products.length; i++) {
+                html += "<tr>";
+                html += "<td>" + products[i].product_desc + "</td>";
+                html += "<td>" + products[i].product_qty + "</td>";
+                html += "<td>" + products[i].product_price + "</td>";
+                html += "<td><button type='submit' onClick='deleteProduct(\"" + products[i].product_desc + "\", this);'/>Delete Item</button> &nbsp <button type='submit' onClick='addCart(\"" + products[i].product_desc + "\", this);'/>Add to Order</button></td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            document.getElementById("demo").innerHTML = html;
+
+            document.getElementById("resetbtn").click()
+        }
+        function deleteProduct(product_id, e) {
+            e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].product_desc == product_desc) {
+                    // DO NOT CHANGE THE 1 HERE
+                    products.splice(i, 1);
+                }
+            }
+        }
+
+        function addCart(product_desc) {
+
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].product_desc == product_desc) {
+                    var cartItem = null;
+                    for (var k = 0; k < cart.length; k++) {
+                        if (cart[k].product.product_desc == products[i].product_desc) {
+                            cartItem = cart[k];
+                            cart[k].product_qty++;
+                            break;
+                        }
+                    }
+                    if (cartItem == null) {
+
+                        var cartItem = {
+                            product: products[i],
+                            product_qty: products[i].product_qty
+                        };
+                        cart.push(cartItem);
+                    }
+                }
+            }
+
+            renderCartTable();
+
+        }
+
+        function renderCartTable() {
+        var html = '';
+        var ele = document.getElementById("demo2");
+        ele.innerHTML = '';
+
+        html += "<table id='tblCart' border='1|1'>";
+        html += "<td>Product Description</td>";
+        html += "<td>Quantity</td>";
+        html += "<td>Price</td>";
+        html += "<td>Total</td>";
+        html += "<td>Action</td></tr>";
+        var GrandTotal = 0;
+        for (var i = 0; i < cart.length; i++) {
+            html += "<tr>";
+            html += "<td>" + cart[i].product.product_desc + "</td>";
+            html += "<td>" + cart[i].product_qty + "</td>";
+            html += "<td>" + cart[i].product.product_price + "</td>";
+            html += "<td>" + parseFloat(cart[i].product.product_price) * parseInt(cart[i].product_qty) + "</td>";
+            html += "<td><button type='submit' onClick='subtractQuantity(\"" + cart[i].product.product_desc + "\", this);'/>Subtract Quantity</button> &nbsp<button type='submit' onClick='addQuantity(\"" + cart[i].product.product_desc + "\", this);'/>Add Quantity</button> &nbsp<button type='submit' onClick='removeItem(\"" + cart[i].product.product_desc + "\", this);'/>Remove Item</button></td>";
+            html += "</tr>";
+
+           GrandTotal += parseFloat(cart[i].product.product_price) * parseInt(cart[i].product_qty);
+
+        }
+        document.getElementById('demo3').innerHTML = GrandTotal;
+        html += "</table>";
+        ele.innerHTML = html;
+
+    }
+
+
+        function subtractQuantity(product_desc)
+        {
+
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].product.product_desc == product_desc) {
+                    cart[i].product_qty--;
+                }
+
+                if (cart[i].product_qty == 0) {
+                    cart.splice(i,1);
+                }
+
+            }
+            renderCartTable();
+        }
+        function addQuantity(product_desc)
+        {
+
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].product.product_desc == product_desc) {
+                    cart[i].product_qty++;
+                }
+            }
+            renderCartTable();
+        }
+        function removeItem(product_desc)
+        {
+
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].product.product_desc == product_desc) {
+                    cart.splice(i,1);
+                }
+
+            }
+            renderCartTable();
+        }
+</script>
+</head>
+
+<body>
+
+<img src = "C:\wamp\www\IP\logo.png" height="130" width="130" align="left">
+<ul>
+  <li><a href="C:\Users\Asus\Downloads\Compressed\final project\index.html"><font size="3" face="verdana">Home</a></li>
+  <li><a href="#services">Services</a></li>
+  <li><a href="#contact">Contact</a></li>
+  <li><a href="#">Sign Up</a></li>
+</ul>
+<br><br><br><br><br><br><br>
+
+  <div class="div1">
+  <br><center><i class="fa fa-building-o" style="font-size:36px;color:white"></i><br>
+     <h2>Choose <br><span style="color:white;">your Venue</span></h2>
+   </center>
+  </div>
+  <i class="fa fa-long-arrow-right" style="font-size:48px;color:darkgrey"></i>
+  <div class="div1">
+  <br><center><i class="fa fa-cutlery" style="font-size:36px;color:white"></i><br>
+     <h2>Order <br><span style="color:white;">your Food</span></h2>
+   </center>
+  </div>
+  <i class="fa fa-long-arrow-right" style="font-size:48px;color:darkgrey"></i>
+   <div class="div1">
+  <br><center><i class="fa fa-credit-card" style="font-size:36px;color:white"></i><br>
+     <h2>Pay <br><span style="color:white;">online</span></h2>
+   </center>
+  </div>
+   <i class="fa fa-long-arrow-right" style="font-size:48px;color:darkgrey"></i>
+    <div class="div1">
+<br><center><i class="fa fa-thumbs-o-up" style="font-size:36px;color:white"></i><br>
+     <h2>Enjoy <br><span style="color:white;">Your Food</span></h2>
+   </center>
+  </div>
+
+
+  <div class="column middle">
+   <pre>
+<font size="6" color="red"><u><i><b>Food Menu</b></i></u>
+<font size="4" color="white">
+<h2>   <u>Square 1</u>			 <u>Shop 1</u>			       <u>Shop 2</u></h2>
+
+    <font size="5"><b>Food Item          Price            Food Item          Price	            Food Item          Price</b></font>
+
+    Dal Makhni combo	     Rs. 70		 Cold Drink             Rs. 35                 Samosa                 Rs. 10
+    Butter Naan              Rs. 15              Real Juice             Rs. 20                 Aloo Patty             Rs. 15
+    Roti                     Rs. 5               Tea                    Rs. 10                 Kulcha                 Rs. 20
+    Dal Makhni               Rs. 25              Coffee                 Rs. 10                 Red Pasta              Rs. 50
+    Mix Veg.                 Rs. 25              Cold Coffee            Rs. 50                 White Pasta            Rs. 50
+    Paneer Lababdar          Rs. 50              Lassi                  Rs. 25                 Nuddles                Rs. 30
+    Channa Masala            Rs. 25                                                            Biscuit                Rs. 10
+    Rice                     Rs. 10                                                            Hide & Seek            Rs. 30
+    Half Butter chicken      Rs. 150                                                           Sandwich               Rs. 15
+    Full Butter chicken      Rs. 300                                                           Sandwich Icecream      Rs. 20
+    Boiled Egg               Rs. 30                                                            Snikkers               Rs. 20
+                                                                                               Munch                  Rs. 10
+</pre>
+  </div>
+
+
+  <form>
+ <fieldset>
+ <legend style="color:black"><i><b>Order</b></i></legend>
+ <font size="2" color="red">*Enter your Order here from above Food Menu:<br><br><br>
+ <label for="product">Food Item:</label>
+ &nbsp<input id="product_desc" name="product" type="text" size="10" required/><br><br>
+<label for="quantity">Quantity:</label>
+&nbsp&nbsp&nbsp&nbsp<input id="quantity" name="quantity" size="10" required/><br><br>
+ <label for="price">Price:</label>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <input id="price" name="price" size="10" required/><br><br>
+
+<button class="button button1" type="reset" name="reset" id="resetbtn" class="resetbtn" value="Reset" >Reset</button>
+<button class="button button2" type="button" id="btnAddProduct" onclick="addProduct();" value="Add New Product">Submit</button>
+
+ </fieldset>
+</form>
+
+<center>
+<p id="demo"></p> <br/>
+<h2> Order List </h2>
+<p id="demo2"></p>
+<h2>Total Amount:</h2>
+<p id="demo3"></p>
+<button class="button button3">Pay Online</button>
+  </center>
+
+
+</body>
+</html>
